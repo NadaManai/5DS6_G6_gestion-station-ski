@@ -1,6 +1,10 @@
 pipeline {
     agent any // Use any available agent
-    
+    tools{
+            jdk 'JAVA_HOME'
+            maven 'M2_HOME'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -11,12 +15,18 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Compile') {
             steps {
 
-               echo "building"
-                // Example build step using Maven
-               sh 'mvn clean package'
+               echo "Compiling"
+               sh "mvn clean compile"
+            }
+        }
+
+        stage('Sonarqube Analysis') {
+            steps {
+
+               echo "Sonarqube"
             }
         }
 
