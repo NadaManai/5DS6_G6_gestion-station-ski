@@ -30,9 +30,7 @@ pipeline {
             steps {
                echo "Sonarqube"
                withSonarQubeEnv(credentialsId: 'sonar-token') {
-                   sh '''$SCANNER HOME/bin/sonar-scanner -Dsonar.projectName=5DS6_G6_gestion-station-ski \
-                   -Dsonar.java.binaries=. \
-                   -Dsonar.projectKey-myproject '''
+                   sh 'mvn clean package sonar:sonar'
                }
             }
         }
