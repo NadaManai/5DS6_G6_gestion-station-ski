@@ -5,9 +5,11 @@ pipeline {
         stage('Checkout') {
             steps {
 
-              echo "clone repo"
+              echo "clone branch Nour"
                 // Clone the repository
-               // git 'https://github.com/your-repo.git'
+                git branch: 'Nour',
+                    credentialsId: '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',
+                    URL: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski/tree/Nour'
             }
         }
 
