@@ -9,7 +9,7 @@ pipeline {
                 // Clone the repository
                 git branch: 'Nour',
                     credentialsId: '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',
-                    URL: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski/tree/Nour'
+                    url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski/tree/Nour'
             }
         }
 
