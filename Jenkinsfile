@@ -1,8 +1,10 @@
 pipeline {
     agent any // Use any available agent
+    /*
     environment{
     SCANNER_HOME = tool 'sonarqube-scanner'
     }
+    */
     tools{
             jdk 'JAVA_HOME'
             maven 'M2_HOME'
