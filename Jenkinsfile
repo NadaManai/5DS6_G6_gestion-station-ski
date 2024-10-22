@@ -7,9 +7,7 @@ pipeline {
 
               echo "clone branch Nour"
                 // Clone the repository
-                git branch: 'Nour',
-                    credentialsId: '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',
-                    url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski/tree/Nour'
+                git branch: 'Nour', credentialsId: 'devops-pipeline', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
         }
 
