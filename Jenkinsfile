@@ -1,5 +1,8 @@
 pipeline {
     agent any // Use any available agent
+    environment{
+    SCANNER_HOME = tool 'sonarqube-scanner'
+    }
     tools{
             jdk 'JAVA_HOME'
             maven 'M2_HOME'
@@ -25,8 +28,12 @@ pipeline {
 
         stage('Sonarqube Analysis') {
             steps {
-
                echo "Sonarqube"
+               withSonarQubeEnv(credentialsId: 'sonar-token') {
+                   sh '''$SCANNER HOME/bin/sonar-scanner -Dsonar.projectName=5DS6_G6_gestion-station-ski \
+                   -Dsonar.java.binaries=. \
+                   -Dsonar.projectKey-myproject '''
+               }
             }
         }
 
