@@ -35,9 +35,7 @@ pipeline {
               //  sh 'scp target/your-app.jar user@staging-server:/path/to/deploy'
             }
         }
-    }
-
-  
+    
         stage('Release') {
             steps {
               echo "releasing"
@@ -45,5 +43,5 @@ pipeline {
             }
         }
     }
-   
+}
 
