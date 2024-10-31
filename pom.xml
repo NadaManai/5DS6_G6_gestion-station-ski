@@ -96,13 +96,13 @@
             <id>deploymentRepo</id>
             <name>Nexus_Repository</name>
             <url>http://192.168.0.33:8081/repository/maven-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
+        <snapshotRepository>
+            <id>deploymentSnapshotRepo</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http:///192.168.0.33:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        
     </distributionManagement>
 
     <build>
