@@ -17,13 +17,14 @@ pipeline {
 
     stage('Sonarqube Analysis') {
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' // specify the directory only, not the java binary
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
            sh '''
                 chmod +x mvnw
+                ./mvnw clean package
                ./mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar
            '''
        }
