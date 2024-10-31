@@ -24,8 +24,8 @@ pipeline {
         withSonarQubeEnv(installationName: 'sonar-server') {
            sh '''
                 chmod +x mvnw
-                ./mvnw clean package
-               ./mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar
+
+               ./mvnw clean package org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar
            '''
        }
     }
