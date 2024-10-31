@@ -1,10 +1,5 @@
 pipeline {
-    agent any // Use any available agent
-    /*
-    environment{
-    SCANNER_HOME = tool 'sonarqube-scanner'
-    }
-    */
+    agent any
     tools{
             jdk 'JAVA_HOME'
             maven 'M2_HOME'
@@ -21,6 +16,9 @@ pipeline {
         }
 
     stage('Sonarqube Analysis') {
+    env:
+        JAVA_HOME: $(JAVA_HOME_17)
+        PATH: $(JAVA_HOME)/bin;$(PATH)
 
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
