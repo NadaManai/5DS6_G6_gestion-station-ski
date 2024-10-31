@@ -37,8 +37,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Perform SonarQube analysis
-                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f"
+                    // Perform SonarQube analysis with the current branch name
+                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.branch.name=${env.BRANCH_NAME}"
                 }
             }
         }
