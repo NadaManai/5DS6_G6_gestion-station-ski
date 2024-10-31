@@ -25,7 +25,7 @@ pipeline {
            sh '''
                 chmod +x mvnw
                 ./mvnw clean package
-               ./mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar
+               ./mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
            '''
        }
     }
