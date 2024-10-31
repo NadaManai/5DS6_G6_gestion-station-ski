@@ -38,8 +38,15 @@ pipeline {
             steps {
                 script {
                     // Perform SonarQube analysis with the current branch name
-                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f "
+                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f"
                 }
+            }
+        }
+
+        stage('Deploy Stage') {
+            steps {
+                // Deploy the project
+                sh 'mvn deploy'
             }
         }
     }
