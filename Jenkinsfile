@@ -32,7 +32,7 @@ pipeline {
             steps {
                echo "Sonarqube"
                withSonarQubeEnv(installationName: 'sonar-server', credentialsId: 'sonar-token') {
-                   sh 'mvn clean  sonar:sonar'
+                   sh './mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
                }
             }
         }
