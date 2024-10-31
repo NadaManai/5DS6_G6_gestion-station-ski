@@ -16,10 +16,10 @@ pipeline {
         }
 
     stage('Sonarqube Analysis') {
-    env:
-        JAVA_HOME: $(JAVA_HOME_17)
-        PATH: $(JAVA_HOME)/bin;$(PATH)
-
+    environment {
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' // specify the directory only, not the java binary
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    }
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
            sh '''
