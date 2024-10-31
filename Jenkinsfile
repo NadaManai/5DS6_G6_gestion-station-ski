@@ -20,21 +20,21 @@ pipeline {
             }
         }
 
-        stage('Sonarqube Analysis') {
-            steps {
-               echo "Sonarqube"
-               withSonarQubeEnv(installationName: 'sonar-server', credentialsId: 'sonar-token') {
-               environment{
-                       JAVA_HOME = '/usr/lib/jvm/java-11-openjdk-amd64'
-                       PATH = "${JAVA_HOME}/bin:${env.PATH}"
-               }
-                   sh '''
-                   export PATH=$JAVA_HOME/bin:$PATH
-                   mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
-                   '''
-               }
-            }
-        }
+    stage('Sonarqube Analysis') {
+        environment {
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk-amd64' // specify the directory only, not the java binary
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    }
+        steps {
+       echo "Running SonarQube Analysis with SonarQube Maven Plugin 3.9.0.2155 and Java 11"
+        withSonarQubeEnv(installationName: 'sonar-server', credentialsId: 'sonar-token') {
+           sh '''
+               mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar \
+                   -Dsonar.host.url=https://your-sonarqube-server
+           '''
+       }
+    }
+}
 
         stage('Test') {
             steps {
