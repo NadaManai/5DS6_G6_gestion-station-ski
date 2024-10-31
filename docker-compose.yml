@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ""              # Laissez vide si non requis
+      MYSQL_DATABASE: stationSki
+    ports:
+      - "3308:3306"                        # Expose le port 3306 de MySQL en interne comme 3308 en externe
+    volumes:
+      - db:/var/lib/mysql
+
+  app-spring:
+    depends_on:
+      - mysqldb
+    image: aliyounes/gestion-station-ski:1.0
+    restart: on-failure
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3306/stationSki?createDatabaseIfNotExist=true"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: ""        # Correspondance avec MySQL
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL5InnoDBDialect"
+    #stdin_open: true                       # Optionnel, pour le débogage interactif
+    #tty: true                              # Optionnel, pour garder le conteneur actif pour la commande
+
+volumes:
+  db:
