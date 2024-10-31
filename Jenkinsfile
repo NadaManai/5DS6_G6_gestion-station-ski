@@ -20,19 +20,11 @@ pipeline {
             }
         }
 
-        stage('Compile') {
-            steps {
-
-               echo "Compiling"
-               sh "mvn clean compile"
-            }
-        }
-
         stage('Sonarqube Analysis') {
             steps {
                echo "Sonarqube"
                withSonarQubeEnv(installationName: 'sonar-server', credentialsId: 'sonar-token') {
-                   sh './mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
+                   sh 'mvn clean  org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
                }
             }
         }
