@@ -93,9 +93,9 @@
 
     <distributionManagement>
         <repository>
-            <id>deploymentRepo</id>
+            <id>Nexus_Repository</id>
             <name>DevOps_Project</name>
-            <url>http://192.168.0.33:8081/repository/maven-mixed/</url>
+            <url>http://192.168.0.33:8081/repository/maven-releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
