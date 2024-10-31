@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+         stage('Clean and Compile') {
+                    steps {
+                        sh 'mvn clean compile'
+                    }
+                }
+
     stage('Sonarqube Analysis') {
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
