@@ -60,17 +60,11 @@ public class InstructorServicesImpl implements IInstructorServices {
 
     @Override
     public Instructor addInstructorAndAssignToCourse(Instructor instructor, Long numCourse) {
-        logger.info("Adding instructor: {} and assigning to course ID: {}", instructor, numCourse);
         Course course = courseRepository.findById(numCourse).orElse(null);
-        if (course == null) {
-            logger.error("Course with ID: {} not found. Instructor not added.", numCourse);
-            return null; // ou vous pouvez lancer une exception
-        }
         Set<Course> courseSet = new HashSet<>();
         courseSet.add(course);
         instructor.setCourses(courseSet);
-        Instructor savedInstructor = instructorRepository.save(instructor);
-        logger.info("Instructor added and assigned to course successfully with ID: {}", savedInstructor.getNumInstructor());
-        return savedInstructor;
+        return instructorRepository.save(instructor);
     }
+
 }
