@@ -1,10 +1,8 @@
 pipeline {
     agent any
-    tools{
-            jdk 'JAVA_HOME'
-            maven 'M2_HOME'
+    options{
+    buildDiscarder(logRotator(numToKeepStr: '5')
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -16,16 +14,12 @@ pipeline {
         }
 
     stage('Sonarqube Analysis') {
-    environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
-    }
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
            sh '''
                 chmod +x mvnw
                 ./mvnw clean package
-               ./mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes
+               ./mvnw clean  org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
            '''
        }
     }
