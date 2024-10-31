@@ -29,8 +29,7 @@ pipeline {
        echo "Running SonarQube Analysis with SonarQube Maven Plugin 3.9.0.2155 and Java 11"
         withSonarQubeEnv(installationName: 'sonar-server', credentialsId: 'sonar-token') {
            sh '''
-               mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar \
-                   -Dsonar.host.url=http://192.168.1.20:9000/
+               mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
            '''
        }
     }
