@@ -26,4 +26,5 @@ public interface ISubscriptionRepository extends CrudRepository<Subscription, Lo
     Float recurringRevenueByTypeSubEquals(TypeSubscription typeSub);
 
 
+
 }
