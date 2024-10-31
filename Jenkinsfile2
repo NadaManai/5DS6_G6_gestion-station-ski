@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    options{
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+    stages {
+        stage('Scan') {
+            steps {
+                    withSonarQubeEnv(installationName:'sonar-server'){
+                     sh '''
+                     chmod +x mvnw
+                     ./mvnw clean package
+                     ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
+                               '''
+            }
+        }
+
+         stage('Quality gate') {
+                    steps {
+                        timeout(time:2, unit: 'MINUTES'){
+                        waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
+         }
+}
+
