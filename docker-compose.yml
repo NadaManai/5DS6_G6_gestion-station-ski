@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql_app
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: stationSki
+    ports:
+      - "3307:3306"  
+    volumes:
+      - mysql_app_data:/var/lib/mysql
+    networks:
+      - app_net
+
+  app:
+    build:
+      context: .  
+      dockerfile: Dockerfile
+    image: nadamanai/nadamanai-5ds6-g6-gestion-station-ski  
+    container_name: ski_station
+    depends_on:
+      - db  
+    ports:
+      - "8089:8089"  
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/stationSki?createDatabaseIfNotExist=true"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL5InnoDBDialect"
+    stdin_open: true  
+    tty: true         
+    networks:
+      - app_net
+
+# Volume pour persister les données de la base de données
+volumes:
+  mysql_app_data:
+
+networks:
+  app_net:
+    driver: bridge
