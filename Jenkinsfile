@@ -19,6 +19,14 @@ pipeline {
                     }
                 }
 
+
+         stage('Test') {
+            steps {
+              echo "testing"
+              sh 'mvn test'
+                   }
+                      }
+
     stage('Sonarqube Analysis') {
         steps {
         withSonarQubeEnv(installationName: 'sonar-server') {
@@ -32,15 +40,6 @@ pipeline {
        }
     }
 }
-
-        stage('Test') {
-            steps {
-               echo "testing"
-                // Run unit tests
-               sh 'mvn test'
-            }
-        }
-
         stage('Deploy') {
             steps {
                echo "deploying"
