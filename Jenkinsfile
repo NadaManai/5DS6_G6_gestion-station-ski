@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = 'nadamanai/nadamanai-5ds6-g6-gestion-station-ski'
-        DOCKER_REGISTRY_CREDENTIALS = 'dockerhub_credentials'  
+        DOCKER_REGISTRY_CREDENTIALS = credentials('dockerhub_credentials')
         DOCKER_REGISTRY_URL = 'https://registry.hub.docker.com'   
     }
 
@@ -44,7 +44,6 @@ pipeline {
             }
         }
 
-        
         stage('Deploy to Nexus') {
             steps {
                 script {
@@ -65,9 +64,11 @@ pipeline {
         stage('Publish Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIALS}") {
-                        sh 'docker push ${DOCKER_IMAGE_NAME}:latest'
-                    }
+                    // Connexion à Docker Hub avec le token d'accès
+                    sh '''
+                        echo "${DOCKER_REGISTRY_CREDENTIALS_PSW}" | docker login --username "${DOCKER_REGISTRY_CREDENTIALS_USR}" --password-stdin
+                    '''
+                    sh 'docker push ${DOCKER_IMAGE_NAME}:latest'
                 }
             }
         }
