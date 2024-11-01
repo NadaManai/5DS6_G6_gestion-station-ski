@@ -43,6 +43,9 @@ pipeline {
             }
         }
 
+
+        // dependecy check here
+
         stage('Maven Deploy to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
@@ -52,10 +55,13 @@ pipeline {
             }
         }
 
-        stage('Release') {
+        stage('Build Docker Image') {
             steps {
-                echo "Releasing"
-                // Additional release steps can be added here
+            withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker') {
+                sh 'docker build -t station-ski-nour -f docker/Dockerfile .'
+                sh 'docker tag station-ski-nour kchaounour/station-ski-nour:latest' //naming docker img besh baed npushiwha
+            }
+
             }
         }
     }
