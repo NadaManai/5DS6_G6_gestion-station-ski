@@ -44,7 +44,7 @@ pipeline {
                     sh ' mvn build '
                 }
             }
-}
+
         stage('Deploy') {
             steps {
                echo "deploying"
@@ -58,7 +58,7 @@ pipeline {
               echo "releasing"
                // 
             }
-
+        }
     }
 }
 
