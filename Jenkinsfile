@@ -36,24 +36,20 @@ pipeline {
             }
         }
 
-        stage('Generate Code Coverage Report') {
-            steps {
-                // Exécute les tests et génère le rapport JaCoCo
-                sh 'mvn test jacoco:report'
-            }
-            post {
-                always {
-                    // Publie le rapport de couverture JaCoCo
-                    jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
-                }
-            }
-        }
-
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Ajout de la spécification de la branche actuelle
-                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Dsonar.branch.name=${env.BRANCH_NAME}"
+                    // Run tests and generate JaCoCo report
+                    sh 'mvn test jacoco:report'
+                    
+                    // SonarQube analysis without branch property
+                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
+                }
+                post {
+                    always {
+                        // Publish JaCoCo coverage report
+                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
+                    }
                 }
             }
         }
