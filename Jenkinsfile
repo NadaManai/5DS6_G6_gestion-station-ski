@@ -37,6 +37,7 @@ pipeline {
            '''
        }
     }
+    }
 
     stage('Build'){
             steps{
