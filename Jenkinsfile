@@ -57,9 +57,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-            withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
-                sh 'sudo docker build -t station-ski-nour -f docker/Dockerfile .'
-                sh 'sudo docker tag station-ski-nour kchaounour/station-ski-nour:latest' //naming docker img besh baed npushiwha
+                    script{
+                                withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
+                                    sh 'sudo docker build -t station-ski-nour -f docker/Dockerfile .'
+                                    sh 'sudo docker tag station-ski-nour kchaounour/station-ski-nour:latest' //naming docker img besh baed npushiwha
+                    }
+
             }
 
             }
