@@ -67,5 +67,19 @@ pipeline {
 
             }
         }
+
+        stage('Push Docker Image') {
+                    steps {
+                            script{
+                                        withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
+                                            sh 'docker push kchaounour/station-ski-nour:latest'
+                            }
+
+                    }
+
+                    }
+                }
+
+
     }
 }
