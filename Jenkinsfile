@@ -71,14 +71,26 @@ pipeline {
         stage('Push Docker Image') {
                     steps {
                             script{
-                                        withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
-                                            sh 'docker push kchaounour/station-ski-nour:latest'
+                                   withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
+                                   sh 'docker push kchaounour/station-ski-nour:latest'
                             }
 
                     }
 
                     }
                 }
+
+        stage('Deploy To Docker Container') {
+                     steps {
+                             script{
+                                       withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
+                                        sh 'docker run -d --name station-ski-nour -p  8089:8089  kchaounour/station-ski-nour:latest'
+                                    }
+
+                            }
+
+                            }
+                        }
 
 
     }
