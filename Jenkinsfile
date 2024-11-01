@@ -6,30 +6,32 @@ pipeline {
         maven 'M2_HOME'
     }
 
+    environment {
+        DOCKER_IMAGE_NAME = 'nadamanai/nadamanai-5ds6-g6-gestion-station-ski'
+        DOCKER_REGISTRY_CREDENTIALS = 'dockerhub_credentials'  
+        DOCKER_REGISTRY_URL = 'https://registry.hub.docker.com'   
+    }
+
     stages {
         stage('GIT') {
             steps {
-                // Clone the Git repository
                 git credentialsId: 'DevOps_Project', branch: 'NadaManai_5DS6_G6', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
         }
 
         stage('Compile Stage') {
             steps {
-                // Compile the project
                 sh 'mvn clean compile'
             }
         }
 
         stage('Test Stage') {
             steps {
-                // Run unit tests
                 sh 'mvn test'
             }
             post {
                 always {
-                    // Handle test results
-                    junit '**/target/surefire-reports/*.xml' // Use this line if you generate JUnit test reports
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -37,27 +39,54 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Perform SonarQube analysis with the current branch name
                     sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f"
                 }
             }
         }
 
-        stage('Deploy Stage') {
+        
+        stage('Deploy to Nexus') {
             steps {
-                // Deploy the project
-                sh 'mvn deploy'
+                script {
+                    sh 'mvn deploy'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'mvn package -DskipTests'  
+                    sh 'docker build -t ${DOCKER_IMAGE_NAME}:latest .'
+                }
+            }
+        }
+
+        stage('Publish Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_REGISTRY_CREDENTIALS}") {
+                        sh 'docker push ${DOCKER_IMAGE_NAME}:latest'
+                    }
+                }
+            }
+        }
+
+        stage('Run with Docker Compose') {
+            steps {
+                script {
+                    sh 'docker-compose down'  
+                    sh 'docker-compose up -d' 
+                }
             }
         }
     }
 
     post {
         success {
-            // Notifications or actions after success
             echo 'Pipeline finished successfully.'
         }
         failure {
-            // Notifications or actions in case of failure
             echo 'Pipeline failed.'
         }
     }
