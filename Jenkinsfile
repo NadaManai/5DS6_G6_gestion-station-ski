@@ -43,13 +43,15 @@ pipeline {
             }
         }
 
-        stage('Maven Deploy to Nexus') {
-            steps {
-                configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
-                    sh 'mvn -s ${mavensettings} clean deploy -DskipTests=true'
-                }
+    stage('Maven Deploy to Nexus') {
+        steps {
+            configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
+                // Define the path to the settings file
+                def settingsFile = 'mavensettings'
+                sh "mvn -s ${settingsFile} clean deploy -DskipTests=true"
             }
         }
+    }
 
         stage('Release') {
             steps {
