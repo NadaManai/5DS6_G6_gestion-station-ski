@@ -58,7 +58,7 @@ pipeline {
               echo "releasing"
                // 
             }
-        }
+
     }
 }
 
