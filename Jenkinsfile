@@ -38,43 +38,32 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    // Run tests and generate JaCoCo report
-                    sh 'mvn test jacoco:report'
-                    
-                    // SonarQube analysis without branch property
-                    sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
-                }
-                post {
-                    always {
-                        // Publish JaCoCo coverage report
-                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
-                    }
+                sh 'mvn test jacoco:report'
+                sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
+            }
+            post {
+                always {
+                    jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
                 }
             }
         }
 
         stage('Deploy to Nexus') {
             steps {
-                script {
-                    sh 'mvn deploy'
-                }
+                sh 'mvn deploy'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'mvn package -DskipTests'
-                    sh "docker build -t ${DOCKER_IMAGE_NAME}:latest ."
-                }
+                sh 'mvn package -DskipTests'
+                sh "docker build -t ${DOCKER_IMAGE_NAME}:latest ."
             }
         }
 
         stage('Publish Docker Image') {
             steps {
                 script {
-                    // Connexion à Docker Hub avec le token d'accès
                     sh '''
                         echo "${DOCKER_REGISTRY_CREDENTIALS_PSW}" | docker login --username "${DOCKER_REGISTRY_CREDENTIALS_USR}" --password-stdin
                     '''
@@ -85,10 +74,8 @@ pipeline {
 
         stage('Run with Docker Compose') {
             steps {
-                script {
-                    sh 'docker-compose down'
-                    sh 'docker-compose up -d'
-                }
+                sh 'docker-compose down'
+                sh 'docker-compose up -d'
             }
         }
 
