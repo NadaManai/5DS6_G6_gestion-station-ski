@@ -37,22 +37,24 @@ pipeline {
            '''
        }
     }
+
+    stage('Build'){
+            steps{
+            sh ' mvn clean package -DskipTests=true'
+            }
+    }
 }
-    stage('Build') {
+    stage('Maven Deploy to nexus') {
                 steps {
-                   echo "deploying"
-                    sh ' mvn clean install '
+                    configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
+
+                    sh 'mvn -s ${mavensettings} clean deploy -DskipTests=true'
+
+                    }
                 }
             }
 
-        stage('Deploy') {
-            steps {
-               echo "deploying"
-                // Example deploy step (adjust according to your deploy strategy)
-              //  sh 'scp target/your-app.jar user@staging-server:/path/to/deploy'
-            }
-        }
-    
+
         stage('Release') {
             steps {
               echo "releasing"
