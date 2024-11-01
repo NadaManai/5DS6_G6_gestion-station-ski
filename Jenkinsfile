@@ -39,6 +39,13 @@ pipeline {
            '''
        }
     }
+
+    stage('Build') {
+                steps {
+                   echo "deploying"
+                    sh ' mvn build '
+                }
+            }
 }
         stage('Deploy') {
             steps {
