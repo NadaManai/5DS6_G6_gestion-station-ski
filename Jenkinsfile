@@ -53,8 +53,6 @@ pipeline {
 
                     }
                 }
-            }
-
 
         stage('Release') {
             steps {
