@@ -37,7 +37,7 @@ pipeline {
             steps {
                echo "testing"
                 // Run unit tests
-              //  sh 'mvn test'
+               sh 'mvn test'
             }
         }
 

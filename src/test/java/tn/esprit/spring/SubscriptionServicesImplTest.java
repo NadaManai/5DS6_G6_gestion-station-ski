@@ -1,8 +1,11 @@
-package tn.esprit.spring.services;
+package tn.esprit.spring;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import tn.esprit.spring.entities.Subscription;
 import tn.esprit.spring.entities.TypeSubscription;
 import tn.esprit.spring.repositories.ISubscriptionRepository;
+import tn.esprit.spring.services.SubscriptionServicesImpl;
 
 
 import java.time.LocalDate;
@@ -24,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class SubscriptionServicesImplTest {
 
@@ -91,6 +95,12 @@ public class SubscriptionServicesImplTest {
 
     }
     */
+
+    @Test
+    public void testSomeFunctionality() {
+        // Your test code here
+        assertEquals(1, 1); // Example assertion
+    }
 
 
     @Test
