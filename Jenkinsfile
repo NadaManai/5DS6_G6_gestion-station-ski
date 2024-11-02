@@ -84,7 +84,7 @@ pipeline {
                 script {
                     
                     sleep(10) 
-                    sh 'curl -X GET http://localhost:8089/api/instructor/all'
+                    sh 'curl -X GET http://192.168.0.110:8089/api/instructor/all'
                 }
             }
         }
