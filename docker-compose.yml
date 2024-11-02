@@ -22,7 +22,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3306/stationSkiDevops?createDatabaseIfNotExist=true"
       SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "nour94551467"
+      SPRING_DATASOURCE_PASSWORD: ""
       SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL5InnoDBDialect"
     stdin_open: true
