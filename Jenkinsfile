@@ -78,7 +78,7 @@ pipeline {
 
                     }
                 }
-
+/*
 stage('Deploy To Docker Container') {
     steps {
         script {
@@ -92,7 +92,23 @@ stage('Deploy To Docker Container') {
     }
 }
 
-                        }
+*/
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    sh '''
+                        docker-compose down || true
+                        docker-compose up -d --build
+                    '''
+                }
+            }
+        }
+
+
+
+}
+
 
 
     }
