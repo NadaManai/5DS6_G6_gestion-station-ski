@@ -79,15 +79,19 @@ pipeline {
                     }
                 }
 
-        stage('Deploy To Docker Container') {
-                     steps {
-                             script{
-                                       withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
-                                        sh 'docker run -d --name station-ski-nour -p  8089:8089  kchaounour/station-ski-nour:latest'
-                                    }
-                            }
+stage('Deploy To Docker Container') {
+    steps {
+        script {
+            sh '''
+                if [ "$(docker ps -aq -f name=station-ski-nour)" ]; then
+                    docker rm -f station-ski-nour
+                fi
+                docker run -d --name station-ski-nour -p 8089:8089 kchaounour/station-ski-nour:latest
+            '''
+        }
+    }
+}
 
-                            }
                         }
 
 
