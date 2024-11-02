@@ -72,10 +72,20 @@ pipeline {
             }
         }
 
-        stage('Run with Docker Compose') {
+        stage('Deploy-container') {
             steps {
                 sh 'docker-compose down'
                 sh 'docker-compose up -d'
+            }
+        }
+
+        stage('Postman Test') {
+            steps {
+                script {
+                    
+                    sleep(10) 
+                    sh 'curl -X GET http://localhost:8089/api/instructor/all'
+                }
             }
         }
 
