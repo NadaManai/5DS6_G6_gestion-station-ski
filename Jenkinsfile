@@ -12,6 +12,11 @@ pipeline {
         DOCKER_REGISTRY_URL = 'https://registry.hub.docker.com'
     }
 
+    triggers {
+        
+        githubPush()
+    }
+
     stages {
         stage('GIT') {
             steps {
@@ -82,7 +87,6 @@ pipeline {
         stage('Postman Test') {
             steps {
                 script {
-                    
                     sleep(10) 
                     sh 'curl -X GET http://192.168.0.110:8089/api/instructor/all'
                 }
