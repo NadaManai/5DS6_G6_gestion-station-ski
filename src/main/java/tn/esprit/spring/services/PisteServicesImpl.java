@@ -15,18 +15,18 @@ public class PisteServicesImpl implements  IPisteServices{
 
     private IPisteRepository pisteRepository;
     private static final Logger logger = LogManager.getLogger(PisteServicesImpl.class);
-    @PostConstruct
-    public void init() {
-        testerLogs();  // Appel de la méthode de test de journalisation au démarrage
-    }
-
-    public void testerLogs() {
-        logger.info("Début du test de journalisation dans testerLogs");
-        logger.debug("Ceci est un message DEBUG dans testerLogs");
-        logger.warn("Ceci est un message WARN dans testerLogs");
-        logger.error("Ceci est un message ERROR dans testerLogs");
-        logger.info("Fin du test de journalisation dans testerLogs");
-    }
+//   @PostConstruct
+//    public void init() {
+//        testerLogs();  // Appel de la méthode de test de journalisation au démarrage
+//    }
+//
+//    public void testerLogs() {
+//        logger.info("Début du test de journalisation dans testerLogs");
+//        logger.debug("Ceci est un message DEBUG dans testerLogs");
+//        logger.warn("Ceci est un message WARN dans testerLogs");
+//        logger.error("Ceci est un message ERROR dans testerLogs");
+//        logger.info("Fin du test de journalisation dans testerLogs");
+//    }
 
     @Override
     public List<Piste> retrieveAllPistes() {
