@@ -94,12 +94,15 @@ stage('Deploy To Docker Container') {
 
 */
 
+        // TODO prune
+
         stage('Deploy with Docker Compose') {
             steps {
                 script {
                     sh '''
-                        docker-compose down || true
-                        docker-compose up -d --build
+                            docker compose down || true
+                            docker compose up -d --build --no-color --wait
+                            docker compose ps
                     '''
                 }
             }
