@@ -5,8 +5,8 @@ services:
     image: mysql:5.7
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: nour94551467
-      MYSQL_DATABASE: stationSkiDevops
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=stationSkiDevops
     ports:
       - "3308:3306"
     volumes:
