@@ -1,33 +1,32 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: stationSki
+    ports:
+      - "3308:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  app-spring:
+    depends_on:
+      - mysqldb
+    image: kchaounour/station-ski-nour:latest
+    restart: on-failure
     ports:
       - "8089:8089"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stationSkiDevops?createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: nour94551467
-    depends_on:
-      - mysql
-    networks:
-      - my-network
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3306/stationSki?createDatabaseIfNotExist=true"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "nour94551467"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL5InnoDBDialect"
+    stdin_open: true
+    tty: true
 
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: stationSkiDevops
-      MYSQL_USER: root
-      MYSQL_PASSWORD: nour94551467
-    ports:
-      - "3306:3306"
-    networks:
-      - my-network
-
-networks:
-  my-network:
-    driver: bridge
+volumes:
+  db:
