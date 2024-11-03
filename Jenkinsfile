@@ -101,7 +101,6 @@ stage('Deploy To Docker Container') {
 
 
                         docker compose stop || true
-
                         docker compose up -d --build --no-color --wait
                         docker compose ps
                     '''
