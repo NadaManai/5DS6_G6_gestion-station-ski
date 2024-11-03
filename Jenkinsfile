@@ -81,6 +81,10 @@ pipeline {
             steps {
                 sh 'docker-compose down'
                 sh 'docker-compose up -d'
+                sh 'sleep 30'
+
+                // Verify deployment
+                sh 'docker-compose ps'
             }
         }
 
@@ -88,8 +92,6 @@ pipeline {
             steps {
                 script {
                     sleep(10)
-                    
-                    
                     sh '''
                         curl -X PUT http://192.168.0.110:8089/api/instructor/addAndAssignToCourse/2 \
                         -H "Content-Type: application/json" \
@@ -99,8 +101,6 @@ pipeline {
                             "dateOfHire": "2023-10-01"
                         }'
                     '''
-                    
-                    
                     sh 'curl -X GET http://192.168.0.110:8089/api/instructor/all'
                 }
             }
@@ -118,10 +118,49 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline finished successfully.'
+            script {
+                emailext (
+                    subject: "✅ Build Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                        <h2>✅ Build Successful</h2>
+                        <p>Good news! The build for <strong>${env.JOB_NAME} #${env.BUILD_NUMBER}</strong> was successful. 🎉</p>
+                        <h3>Build Summary:</h3>
+                        <ul>
+                            <li><strong>Project:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                            <li><strong>Status:</strong> Success</li>
+                            <li><strong>Timestamp:</strong> ${new Date()}</li>
+                        </ul>
+                        <h3>Postman Test Results:</h3>
+                        <p>Here are the results of the GET request for all instructors.</p>
+                        <pre>${sh(script: 'curl -s http://192.168.0.110:8089/api/instructor/all', returnStdout: true)}</pre>
+                        <p>Keep up the good work! 🚀</p>
+                    """,
+                    mimeType: 'text/html',
+                    to: 'nada.manai@esprit.tn'
+                )
+            }
         }
         failure {
-            echo 'Pipeline failed.'
+            script {
+                emailext (
+                    subject: "❌ Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                        <h2>❌ Build Failed</h2>
+                        <p>Unfortunately, the build for <strong>${env.JOB_NAME} #${env.BUILD_NUMBER}</strong> has failed. 😞</p>
+                        <h3>Build Summary:</h3>
+                        <ul>
+                            <li><strong>Project:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                            <li><strong>Status:</strong> Failed</li>
+                            <li><strong>Timestamp:</strong> ${new Date()}</li>
+                        </ul>
+                        <p>Please review the logs to identify and address the issues. 🔍</p>
+                    """,
+                    mimeType: 'text/html',
+                    to: 'nada.manai@esprit.tn'
+                )
+            }
         }
     }
 }
