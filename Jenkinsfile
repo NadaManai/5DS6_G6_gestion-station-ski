@@ -1,5 +1,5 @@
 pipeline {
-    // test automated trigger
+    // test automated triggerxx
     agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
