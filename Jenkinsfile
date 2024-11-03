@@ -1,4 +1,5 @@
 pipeline {
+    // test automated trigger
     agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -6,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "Cloning branch Nour"
+                checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
                 slackSend message: 'I cloned my branch '
                 git branch: 'Nour', credentialsId: 'devops-pipeline', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
