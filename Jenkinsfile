@@ -65,7 +65,7 @@ pipeline {
             }
             }
         }
-/*
+
         stage('Push Docker Image') {
                     steps {
                             script{
@@ -78,8 +78,8 @@ pipeline {
                 }
 
           */
-/*
-stage('Deploy To Docker Container') {
+
+        stage('Deploy To Docker Container') {
     steps {
         script {
             sh '''
@@ -91,8 +91,6 @@ stage('Deploy To Docker Container') {
         }
     }
 }
-
-*/
 
         // TODO prune
 
