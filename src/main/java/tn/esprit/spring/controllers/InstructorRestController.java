@@ -20,7 +20,7 @@ import java.util.List;
 public class InstructorRestController {
 
     private static final Logger logger = LogManager.getLogger(InstructorRestController.class);
-    
+
     private final IInstructorServices instructorServices;
     private final MeterRegistry meterRegistry;
 
@@ -29,6 +29,7 @@ public class InstructorRestController {
     private final Counter instructorUpdatedCounter;
     private final Counter instructorRetrievedCounter;
 
+    // Lombok gère déjà l'initialisation des dépendances ici
     public InstructorRestController(IInstructorServices instructorServices, MeterRegistry meterRegistry) {
         this.instructorServices = instructorServices;
         this.meterRegistry = meterRegistry;
