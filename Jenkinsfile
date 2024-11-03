@@ -65,7 +65,7 @@ pipeline {
             }
             }
         }
-
+/*
         stage('Push Docker Image') {
                     steps {
                             script{
@@ -76,6 +76,8 @@ pipeline {
 
                     }
                 }
+
+          */
 /*
 stage('Deploy To Docker Container') {
     steps {
@@ -99,8 +101,8 @@ stage('Deploy To Docker Container') {
                 script {
                     sh '''
 
-                    sh 'docker compose stop || true'
-                    sh 'docker compose start || true'
+                    docker compose stop || true
+                    docker compose start || true
 
 
                     '''
