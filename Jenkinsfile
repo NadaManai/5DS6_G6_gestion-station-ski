@@ -100,10 +100,10 @@ stage('Deploy To Docker Container') {
                     sh '''
 
 
-                        docker-compose stop || true
+                        docker compose stop || true
 
-                        docker-compose up -d --build --no-color --wait
-                        docker-compose ps
+                        docker compose up -d --build --no-color --wait
+                        docker compose ps
                     '''
                 }
             }
