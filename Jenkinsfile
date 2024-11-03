@@ -94,9 +94,9 @@ pipeline {
                         curl -X PUT http://192.168.0.110:8089/api/instructor/addAndAssignToCourse/2 \
                         -H "Content-Type: application/json" \
                         -d '{
-                            "firstName": "Jane",
-                            "lastName": "Smith",
-                            "dateOfHire": "2023-11-01"
+                            "firstName": "Nada",
+                            "lastName": "Manai",
+                            "dateOfHire": "2023-10-01"
                         }'
                     '''
                     
