@@ -46,13 +46,13 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=toutou94551467
 
-  nexus:
-    image: sonatype/nexus3
-    restart: unless-stopped
-    ports:
-      - "8081:8081"
-    volumes:
-      - nexus-data:/nexus-data
+  # nexus:
+  #   image: sonatype/nexus3
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8081:8081"
+  #   volumes:
+  #     - nexus-data:/nexus-data
 
   sonarqube:
     image: sonarqube
