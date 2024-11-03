@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Cloning branch Nour"
-                // Clone the repository
+                slackSend message: 'I cloned my branch '
                 git branch: 'Nour', credentialsId: 'devops-pipeline', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
         }
@@ -49,7 +49,7 @@ pipeline {
         stage('Maven Deploy to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
-                    // Directly use the path in the sh command
+                    slackSend message: 'I deployed my app to nexus'
                     sh "mvn -s mavensettings clean deploy -DskipTests=true"
                 }
             }
@@ -73,6 +73,7 @@ pipeline {
                             script{
                                    withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
                                    sh 'docker push kchaounour/station-ski-nour:latest'
+                                   slackSend message: 'I pushed my img into DockerHub'
                             }
                     }
 
@@ -103,7 +104,9 @@ stage('Deploy To Docker Container') {
                             docker compose down || true
                             docker compose up -d --build --no-color --wait
                             docker compose ps
+
                     '''
+                    slackSend message: 'Starting app container, our app is working yay !!'
                 }
             }
         }
@@ -117,6 +120,7 @@ stage('Deploy To Docker Container') {
                             docker start prometheus
                             docker ps -a
                     '''
+                    slackSend message: "let's visualize the dashboad in : http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
                 }
             }
         }
