@@ -8,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Instructor;
 import tn.esprit.spring.services.IInstructorServices;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Counter;
 
 import java.util.List;
 
@@ -20,25 +18,8 @@ import java.util.List;
 public class InstructorRestController {
 
     private static final Logger logger = LogManager.getLogger(InstructorRestController.class);
-
+    
     private final IInstructorServices instructorServices;
-    private final MeterRegistry meterRegistry;
-
-    // Déclaration des compteurs pour les métriques
-    private final Counter instructorAddedCounter;
-    private final Counter instructorUpdatedCounter;
-    private final Counter instructorRetrievedCounter;
-
-    // Lombok gère déjà l'initialisation des dépendances ici
-    public InstructorRestController(IInstructorServices instructorServices, MeterRegistry meterRegistry) {
-        this.instructorServices = instructorServices;
-        this.meterRegistry = meterRegistry;
-
-        // Initialisation des compteurs
-        this.instructorAddedCounter = meterRegistry.counter("instructor.added");
-        this.instructorUpdatedCounter = meterRegistry.counter("instructor.updated");
-        this.instructorRetrievedCounter = meterRegistry.counter("instructor.retrieved");
-    }
 
     @Operation(description = "Add Instructor")
     @PostMapping("/add")
@@ -46,9 +27,6 @@ public class InstructorRestController {
         logger.info("Received request to add instructor: {}", instructor);
         Instructor addedInstructor = instructorServices.addInstructor(instructor);
         logger.info("Instructor added successfully with ID: {}", addedInstructor.getNumInstructor());
-
-        // Incrémentation du compteur
-        instructorAddedCounter.increment();
         return addedInstructor;
     }
 
@@ -59,7 +37,6 @@ public class InstructorRestController {
         Instructor addedInstructor = instructorServices.addInstructorAndAssignToCourse(instructor, numCourse);
         if (addedInstructor != null) {
             logger.info("Instructor added and assigned to course successfully with ID: {}", addedInstructor.getNumInstructor());
-            instructorAddedCounter.increment(); // Incrémentation si l'instructeur a été ajouté
         } else {
             logger.error("Failed to add instructor and assign to course ID: {}", numCourse);
         }
@@ -72,21 +49,15 @@ public class InstructorRestController {
         logger.info("Received request to retrieve all instructors");
         List<Instructor> instructors = instructorServices.retrieveAllInstructors();
         logger.debug("Retrieved instructors: {}", instructors);
-        
-        // Incrémentation du compteur
-        instructorRetrievedCounter.increment(instructors.size());
         return instructors;
     }
 
-    @Operation(description = "Update Instructor")
+    @Operation(description = "Update Instructor ")
     @PutMapping("/update")
     public Instructor updateInstructor(@RequestBody Instructor instructor) {
         logger.info("Received request to update instructor: {}", instructor);
         Instructor updatedInstructor = instructorServices.updateInstructor(instructor);
         logger.info("Instructor updated successfully with ID: {}", updatedInstructor.getNumInstructor());
-
-        // Incrémentation du compteur
-        instructorUpdatedCounter.increment();
         return updatedInstructor;
     }
 
@@ -99,7 +70,6 @@ public class InstructorRestController {
             logger.warn("Instructor with ID: {} not found", numInstructor);
         } else {
             logger.info("Retrieved instructor: {}", instructor);
-            instructorRetrievedCounter.increment(); // Incrémentation si l'instructeur a été trouvé
         }
         return instructor;
     }
