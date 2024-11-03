@@ -109,6 +109,18 @@ stage('Deploy To Docker Container') {
         }
 
 
+ stage('Prometheus Grafana') {
+            steps {
+                script {
+                    sh '''
+                            docker start grafana
+                            docker start prometheus
+                            docker ps -a
+                    '''
+                }
+            }
+        }
+
 
 }
 
