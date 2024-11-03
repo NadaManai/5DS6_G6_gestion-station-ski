@@ -98,12 +98,12 @@ stage('Deploy To Docker Container') {
             steps {
                 script {
                     sh '''
-                            // Stop existing containers, without removing them
-                               sh 'docker compose stop || true'
-                               // Start containers without rebuilding them
-                                sh 'docker compose start || true'
-                                 // If you want to ensure they are built if changed, use this instead
-                                  // sh 'docker compose up -d --no-build'
+
+
+                        docker-compose stop || true
+
+                        docker-compose up -d --build --no-color --wait
+                        docker-compose ps
                     '''
                 }
             }
