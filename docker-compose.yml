@@ -20,7 +20,7 @@ services:
     ports:
       - "8089:8089"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3306/stationSkiDevops?"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:3306/stationSkiDevops?createDatabaseIfNotExist=true"
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: ""
       SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
@@ -54,23 +54,9 @@ services:
   #   volumes:
   #     - nexus-data:/nexus-data
 
-  sonarqube:
-    image: sonarqube
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-    environment:
-      - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/sonarqube?createDatabaseIfNotExist=true
-      - SONAR_JDBC_USERNAME=root
-      - SONAR_JDBC_PASSWORD=
-    volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_bundled-plugins:/opt/sonarqube/bundled-plugins
+
 
 volumes:
   db:
   nexus-data:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_bundled-plugins:
+
