@@ -4,7 +4,7 @@ import tn.esprit.spring.entities.Skier;
 import tn.esprit.spring.entities.TypeSubscription;
 
 import java.util.List;
-
+//hallo//git
 public interface ISkierServices {
 
 	List<Skier> retrieveAllSkiers();
