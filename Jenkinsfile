@@ -99,10 +99,10 @@ stage('Deploy To Docker Container') {
                 script {
                     sh '''
 
+                    sh 'docker compose stop || true'
+                    sh 'docker compose start || true'
 
-                        docker compose stop || true
-                        docker compose up -d --build --no-color --wait
-                        docker compose ps
+
                     '''
                 }
             }
