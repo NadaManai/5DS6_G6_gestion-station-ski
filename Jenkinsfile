@@ -49,7 +49,7 @@ pipeline {
         stage('Maven Deploy to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
-                    sh "docker start nexus || true"
+                    // Directly use the path in the sh command
                     sh "mvn -s mavensettings clean deploy -DskipTests=true"
                 }
             }
@@ -62,7 +62,9 @@ pipeline {
                         sh 'docker build -t station-ski-nour -f docker/Dockerfile .'
                         sh 'docker tag station-ski-nour kchaounour/station-ski-nour:latest' //naming docker img besh baed npushiwha
                     }
+
             }
+
             }
         }
 
@@ -76,10 +78,8 @@ pipeline {
 
                     }
                 }
-
-
-
-        stage('Deploy To Docker Container') {
+/*
+stage('Deploy To Docker Container') {
     steps {
         script {
             sh '''
@@ -92,23 +92,27 @@ pipeline {
     }
 }
 
+*/
+
         // TODO prune
 
         stage('Deploy with Docker Compose') {
             steps {
                 script {
                     sh '''
-
-                    docker compose stop || true
-                    docker compose start || true
-
-
+                            docker compose down || true
+                            docker compose up -d --build --no-color --wait
+                            docker compose ps
                     '''
                 }
             }
         }
 
+
+
 }
+
+
 
     }
 
