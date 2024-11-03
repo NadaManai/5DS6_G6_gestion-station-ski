@@ -20,4 +20,6 @@ public interface ISubscriptionServices {
 	List<Subscription> retrieveSubscriptionsByDates(LocalDate startDate, LocalDate endDate);
 
 	void retrieveSubscriptions();
+
+	public Iterable<Subscription> getAllSubscriptions();
 }

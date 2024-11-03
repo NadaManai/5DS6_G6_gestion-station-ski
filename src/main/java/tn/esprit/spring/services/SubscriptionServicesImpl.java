@@ -59,6 +59,7 @@ public class SubscriptionServicesImpl implements ISubscriptionServices{
         return subscriptionRepository.getSubscriptionsByStartDateBetween(startDate, endDate);
     }
 
+    @Override
     // I added those for testing
     public Iterable<Subscription> getAllSubscriptions(){
         Iterable<Subscription> subscriptions = subscriptionRepository.findAll();
