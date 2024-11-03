@@ -28,35 +28,5 @@ services:
     stdin_open: true
     tty: true
 
-  prometheus:
-    image: prom/prometheus
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-
-  grafana:
-    image: grafana/grafana
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=toutou94551467
-
-  # nexus:
-  #   image: sonatype/nexus3
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8081:8081"
-  #   volumes:
-  #     - nexus-data:/nexus-data
-
-
-
 volumes:
   db:
-  nexus-data:
-
