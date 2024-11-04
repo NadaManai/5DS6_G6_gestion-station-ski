@@ -80,7 +80,8 @@ pipeline {
                     sh 'sleep 10'
 
                     // Exécuter la commande Maven deploy
-                    sh 'mvn deploy -DskipTests'
+                    sh 'mvn deploy -DskipTests -X'
+
                 }
             }
         }
