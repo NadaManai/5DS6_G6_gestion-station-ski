@@ -14,6 +14,9 @@
 	<name>gestion-station-ski</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+                <sonar.projectKey>5DS6_G6_gestion-station-ski</sonar.projectKey>
+                <sonar.host.url>http://192.168.33.10:9000</sonar.host.url> <!-- Or your SonarQube server URL -->
+                <sonar.login>sqp_70cd3758f330e19fb990956390192a3799fbc397</sonar.login> <!-- Use your generated token for authentication -->
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 	</properties>
@@ -57,6 +60,12 @@
 
 	<build>
 		<plugins>
+                        <plugin>
+                                 <groupId>org.sonarsource.scanner.maven</groupId>
+                                 <artifactId>sonar-maven-plugin</artifactId>
+                                 <version>3.9.1.2184</version>
+                        </plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -70,6 +79,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
 	</build>
 
 </project>
