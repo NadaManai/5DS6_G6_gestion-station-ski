@@ -102,6 +102,34 @@ pipeline {
                 sh 'docker push aliyounes/gestion-station-ski:1.4'
             }
         }
+        stage('Docker Compose') {
+            steps {
+                script {
+                    // Lancer Docker Compose pour démarrer les conteneurs
+                    sh 'docker compose up -d'
+
+                    // Pause pour s’assurer que les conteneurs ont le temps de démarrer
+                    sh 'sleep 10'
+
+                    // Vérification du conteneur app-spring
+                    def appContainer = sh(script: "docker ps | grep app-spring", returnStatus: true)
+                    if (appContainer == 0) {
+                        echo "Création du conteneur Spring réussie pour gestion-station-ski."
+                    } else {
+                        error "Échec du démarrage du conteneur Spring pour gestion-station-ski."
+                    }
+
+                    // Vérification du conteneur mysqldb
+                    def dbContainer = sh(script: "docker ps | grep mysqldb", returnStatus: true)
+                    if (dbContainer == 0) {
+                        echo "Création du conteneur MySQL réussie pour MySQL 5.7."
+                    } else {
+                        error "Échec du démarrage du conteneur MySQL pour MySQL 5.7."
+                    }
+                }
+            }
+        }
+
 
 
 
