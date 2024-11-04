@@ -24,7 +24,9 @@ pipeline {
                 sh 'mvn test'
             }
             post{
-                junit '**/target/sunfire-reports/*.xml'
+                always{
+                    junit '**/target/sunfire-reports/*.xml'
+                }
             }
         }
                       }
