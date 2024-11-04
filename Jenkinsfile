@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -23,13 +22,12 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
-            post{
-                always{
+            post {
+                always {
                     junit '**/target/sunfire-reports/*.xml'
                 }
             }
         }
-                      }
 
         stage('Sonarqube Analysis') {
             steps {
@@ -41,23 +39,22 @@ pipeline {
                         ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.url=http://192.168.1.20:9000/ -Dsonar.login=squ_22403973d23165d1f6c677a22be4ccf457a87f4a -Dsonar.projectName=5DS6_G6_gestion-station-ski -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     '''
                 }
-                 post {
-                        always {
-                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
-                                }
-                       }
+            }
+            post {
+                always {
+                    jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
+                }
             }
         }
 
-/*
+        /*
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
 
-
-        // dependecy check here
+        // Dependency check here
 
         stage('Maven Deploy to Nexus') {
             steps {
@@ -70,43 +67,38 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                    script{
-                        withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
+                script {
+                    withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker') {
                         sh 'docker build -t station-ski-nour -f docker/Dockerfile .'
-                        sh 'docker tag station-ski-nour kchaounour/station-ski-nour:latest' //naming docker img besh baed npushiwha
+                        sh 'docker tag station-ski-nour kchaounour/station-ski-nour:latest'
                     }
-
-            }
-
+                }
             }
         }
 
         stage('Push Docker Image') {
-                    steps {
-                            script{
-                                   withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker')  {
-                                   sh 'docker push kchaounour/station-ski-nour:latest'
-                                   slackSend message: 'I pushed my img into DockerHub'
-                            }
-                    }
-
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: '27f21e11-c55f-4dc7-8c6b-d586ce645eb0', toolName: 'docker') {
+                        sh 'docker push kchaounour/station-ski-nour:latest'
+                        slackSend message: 'I pushed my img into DockerHub'
                     }
                 }
-
-stage('Deploy To Docker Container') {
-    steps {
-        script {
-            sh '''
-                if [ "$(docker ps -aq -f name=station-ski-nour)" ]; then
-                    docker rm -f station-ski-nour
-                fi
-                docker run -d --name station-ski-nour -p 8089:8089 kchaounour/station-ski-nour:latest
-            '''
+            }
         }
-    }
-}
 
-
+        stage('Deploy To Docker Container') {
+            steps {
+                script {
+                    sh '''
+                        if [ "$(docker ps -aq -f name=station-ski-nour)" ]; then
+                            docker rm -f station-ski-nour
+                        fi
+                        docker run -d --name station-ski-nour -p 8089:8089 kchaounour/station-ski-nour:latest
+                    '''
+                }
+            }
+        }
 
         // TODO prune
 
@@ -114,35 +106,27 @@ stage('Deploy To Docker Container') {
             steps {
                 script {
                     sh '''
-                            docker compose down || true
-                            docker compose up -d --build --no-color --wait
-                            docker compose ps
-
+                        docker compose down || true
+                        docker compose up -d --build --no-color --wait
+                        docker compose ps
                     '''
                     slackSend message: 'Starting app container, our app is working yay !!'
                 }
             }
         }
 
-
- stage('Prometheus Grafana') {
+        stage('Prometheus Grafana') {
             steps {
                 script {
                     sh '''
-                            docker start grafana
-                            docker start prometheus
-                            docker ps -a
+                        docker start grafana
+                        docker start prometheus
+                        docker ps -a
                     '''
-                    slackSend message: "let's visualize the dashboad in : http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
+                    slackSend message: "Let's visualize the dashboard at: http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
                 }
             }
         }
-
-*/
-
+        */
+    }
 }
-
-
-
-
-
