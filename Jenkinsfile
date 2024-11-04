@@ -5,6 +5,7 @@ pipeline {
         maven 'M2_HOME'
     }
 
+
     stages {
         stage('Git') {
             steps {
@@ -62,6 +63,9 @@ pipeline {
             }
         }
         stage('Nexus') {
+            environment {
+                NEXUS_CREDENTIALS = credentials('nexus-credentials')
+            }
             steps {
                 script {
                     // Démarrer le conteneur Nexus
@@ -69,7 +73,6 @@ pipeline {
 
                     // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
                     def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
-
                     if (!nexusRunning) {
                         error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
                     } else {
@@ -79,12 +82,25 @@ pipeline {
                     // Pause pour s'assurer que Nexus est bien initialisé
                     sh 'sleep 10'
 
-                    // Exécuter la commande Maven deploy
-                    sh 'mvn deploy -DskipTests -X'
+                    // Créer un fichier settings.xml avec les credentials Nexus
+                    writeFile file: 'settings.xml', text: """
+                    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+                        <servers>
+                            <server>
+                                <id>deploymentRepo</id>
+                                <username>${NEXUS_CREDENTIALS_USR}</username>
+                                <password>${NEXUS_CREDENTIALS_PSW}</password>
+                            </server>
+                        </servers>
+                    </settings>
+                    """
 
+                    // Exécuter la commande Maven deploy avec le settings.xml pour l'authentification
+                    sh 'mvn deploy -s settings.xml -DskipTests -X'
                 }
             }
         }
+
 
 
     }
