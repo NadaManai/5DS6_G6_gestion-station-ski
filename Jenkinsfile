@@ -128,58 +128,57 @@ pipeline {
                     }
                 }
             }
-            stage('Grafana') {
-                steps {
-                    script {
-                        // Démarre le conteneur mysql-exporter2
-                        echo "Démarrage du conteneur mysql-exporter2..."
-                        sh 'docker start mysql-exporter2'
-
-                        // Pause de 180 secondes
-                        sleep 180
-
-                        // Vérifie si mysql-exporter2 est en cours d’exécution
-                        def mysqlExporterContainer = sh(script: "docker ps | grep mysql-exporter2", returnStatus: true)
-                        if (mysqlExporterContainer == 0) {
-                            echo "Création du conteneur mysql-exporter2 réussie."
-                        } else {
-                            error "Échec du démarrage du conteneur mysql-exporter2."
-                        }
-
-                        // Démarre le conteneur prometheus
-                        echo "Démarrage du conteneur prometheus..."
-                        sh 'docker start prometheus'
-
-                        // Pause de 180 secondes
-                        sleep 180
-
-                        // Vérifie si prometheus est en cours d’exécution
-                        def prometheusContainer = sh(script: "docker ps | grep prometheus", returnStatus: true)
-                        if (prometheusContainer == 0) {
-                            echo "Création du conteneur prometheus réussie."
-                        } else {
-                            error "Échec du démarrage du conteneur prometheus."
-                        }
-
-                        // Démarre le conteneur grafana
-                        echo "Démarrage du conteneur grafana..."
-                        sh 'docker start grafana'
-                        
-                        // Pause de 180 secondes
-                        sleep 180
-
-                        // Vérifie si grafana est en cours d’exécution
-                        def grafanaContainer = sh(script: "docker ps | grep grafana", returnStatus: true)
-                        if (grafanaContainer == 0) {
-                            echo "Création du conteneur grafana réussie."
-                        } else {
-                            error "Échec du démarrage du conteneur grafana."
-                        }
-                    }
-                }
-            }
 
         }
+         stage('Grafana') {
+                        steps {
+                            script {
+                                // Démarre le conteneur mysql-exporter2
+                                echo "Démarrage du conteneur mysql-exporter2..."
+                                sh 'docker start mysql-exporter2'
+
+                                // Pause de 180 secondes
+                                sleep 180
+
+                                // Vérifie si mysql-exporter2 est en cours d’exécution
+                                def mysqlExporterContainer = sh(script: "docker ps | grep mysql-exporter2", returnStatus: true)
+                                if (mysqlExporterContainer == 0) {
+                                    echo "Création du conteneur mysql-exporter2 réussie."
+                                } else {
+                                    error "Échec du démarrage du conteneur mysql-exporter2."
+                                }
+
+                                // Démarre le conteneur prometheus
+                                echo "Démarrage du conteneur prometheus..."
+                                sh 'docker start prometheus'
+
+                                // Pause de 180 secondes
+                                sleep 180
+
+                                // Vérifie si prometheus est en cours d’exécution
+                                def prometheusContainer = sh(script: "docker ps | grep prometheus", returnStatus: true)
+                                if (prometheusContainer == 0) {
+                                    echo "Création du conteneur prometheus réussie."
+                                } else {
+                                    error "Échec du démarrage du conteneur prometheus."
+                                }
+
+                                // Démarre le conteneur grafana
+                                echo "Démarrage du conteneur grafana..."
+                                sh 'docker start grafana'
+
+                                // Pause de 180 secondes
+                                sleep 180
+
+                                // Vérifie si grafana est en cours d’exécution
+                                def grafanaContainer = sh(script: "docker ps | grep grafana", returnStatus: true)
+                                if (grafanaContainer == 0) {
+                                    echo "Création du conteneur grafana réussie."
+                                } else {
+                                    error "Échec du démarrage du conteneur grafana."
+                                }
+                            }
+         }               }
 
 
 
