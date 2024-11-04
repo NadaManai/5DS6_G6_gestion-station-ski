@@ -62,7 +62,7 @@ pipeline {
 
             }
         }
-        stage('Nexus') {
+        stage('Start, Check, and Deploy to Nexus') {
             steps {
                 script {
                     // Démarre le conteneur Nexus
@@ -80,7 +80,7 @@ pipeline {
                     sh 'sleep 10'
 
                     // Déployer sur Nexus sans injection de credentials
-                    sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml '
+                    sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml -X'
                 }
             }
         }
