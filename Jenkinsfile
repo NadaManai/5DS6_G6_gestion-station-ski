@@ -1,9 +1,9 @@
 pipeline {
     agent any
     tools {
-            jdk 'JAVA_HOME'       // Utilise le JDK configuré sous ce nom dans Jenkins
-            maven 'M2_HOME'       // Utilise Maven configuré sous ce nom dans Jenkins
-        }
+        jdk 'JAVA_HOME'       // Utilise le JDK configuré sous ce nom dans Jenkins
+        maven 'M2_HOME'       // Utilise Maven configuré sous ce nom dans Jenkins
+    }
 
     stages {
         stage('Git') {
@@ -14,31 +14,29 @@ pipeline {
             }
         }
         stage('Maven Clean') {
-                    steps {
-                        // Exécute 'mvn clean install' pour installer et compiler
-                                        sh 'mvn clean install -U -DskipTests'
-                                        // Ensuite, 'mvn package' pour générer le package final
-                                        sh 'mvn clean package -DskipTests'
-                    }
-                }
+            steps {
+                // Exécute 'mvn clean install' pour installer et compiler
+                sh 'mvn clean install -U -DskipTests'
+                // Ensuite, 'mvn package' pour générer le package final
+                sh 'mvn clean package -DskipTests'
+            }
+        }
         stage('Mockito Tests') {
-                    steps {
-                        script {
-                            echo "Démarrage des tests unitaires avec Mockito..."
-                            sh 'mvn test -Dspring.profiles.active=test'
-                            echo "Tests unitaires terminés avec succès !"
-                        }
-                    }
-                    post {
-                        success {
-                            echo "Tous les tests unitaires sont réussis."
-                        }
-                        failure {
-                            echo "Des tests unitaires ont échoué."
-                        }
-                    }
+            steps {
+                script {
+                    echo "Démarrage des tests unitaires avec Mockito..."
+                    sh 'mvn test -Dspring.profiles.active=test'
+                    echo "Tests unitaires terminés avec succès !"
                 }
             }
-
+            post {
+                success {
+                    echo "Tous les tests unitaires sont réussis."
+                }
+                failure {
+                    echo "Des tests unitaires ont échoué."
+                }
+            }
+        }
     }
 }
