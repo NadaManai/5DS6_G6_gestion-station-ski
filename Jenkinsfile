@@ -1,5 +1,5 @@
 pipeline {
-    // test automated triggerxx
+
     agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -21,23 +21,33 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo "Testing"
                 sh 'mvn test'
             }
+            post{
+                junit '**/target/sunfire-reports/*.xml'
+            }
         }
-/*
+                      }
+
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
                     sh '''
+                        mvn test jacoco-report
                         chmod +x mvnw
                         ./mvnw clean package
-                        ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.url=http://192.168.1.20:9000/ -Dsonar.login=squ_22403973d23165d1f6c677a22be4ccf457a87f4a -Dsonar.projectName=5DS6_G6_gestion-station-ski -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Pcoverage
+                        ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.url=http://192.168.1.20:9000/ -Dsonar.login=squ_22403973d23165d1f6c677a22be4ccf457a87f4a -Dsonar.projectName=5DS6_G6_gestion-station-ski -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     '''
                 }
+                 post {
+                        always {
+                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
+                                }
+                       }
             }
         }
-*/
+
+/*
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
@@ -80,7 +90,7 @@ pipeline {
 
                     }
                 }
-/*
+
 stage('Deploy To Docker Container') {
     steps {
         script {
@@ -94,7 +104,7 @@ stage('Deploy To Docker Container') {
     }
 }
 
-*/
+
 
         // TODO prune
 
@@ -126,6 +136,7 @@ stage('Deploy To Docker Container') {
             }
         }
 
+*/
 
 }
 
