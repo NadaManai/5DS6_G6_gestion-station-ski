@@ -86,7 +86,7 @@ pipeline {
                 }
             }
         }
-
+    /*
         stage('Deploy To Docker Container') {
             steps {
                 script {
@@ -99,7 +99,7 @@ pipeline {
                 }
             }
         }
-
+*/
         // TODO prune
 
         stage('Deploy with Docker Compose') {
