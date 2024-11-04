@@ -103,14 +103,14 @@ class RegistrationServicesImplTest {
         Course course = new Course();
         course.setNumCourse(1L);
         course.setTypeCourse(TypeCourse.INDIVIDUAL);
+        Registration registration = new Registration(); // Initialize the registration object
 
         when(skierRepository.findById(anyLong())).thenReturn(Optional.of(skier));
         when(courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
         when(registrationRepository.countDistinctByNumWeekAndSkier_NumSkierAndCourse_NumCourse(anyInt(), anyLong(), anyLong())).thenReturn(0L);
-        when(registrationRepository.save(any(Registration.class)));
+        when(registrationRepository.save(any(Registration.class))).thenReturn(registration); // Add this line
 
         // Act
-        Registration registration = null;
         Registration result = registrationServices.addRegistrationAndAssignToSkierAndCourse(registration, 1L, 1L);
 
         // Assert
@@ -118,6 +118,7 @@ class RegistrationServicesImplTest {
         assertEquals(skier, result.getSkier());
         assertEquals(course, result.getCourse());
     }
+
 
     // Additional tests can be added here for other scenarios
 
