@@ -143,6 +143,7 @@ pipeline {
         }
         failure {
             script {
+                def logLines = currentBuild.rawBuild.getLog(10).join('\n') 
                 emailext (
                     subject: "❌ Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
@@ -155,6 +156,8 @@ pipeline {
                             <li><strong>Status:</strong> Failed</li>
                             <li><strong>Timestamp:</strong> ${new Date()}</li>
                         </ul>
+                        <h3>Error Log:</h3>
+                        <pre>${logLines}</pre>
                         <p>Please review the logs to identify and address the issues. 🔍</p>
                     """,
                     mimeType: 'text/html',
