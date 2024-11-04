@@ -62,7 +62,7 @@ pipeline {
 
             }
         }
-        stage('Start, Check, and Deploy to Nexus') {
+        stage(' Nexus') {
             steps {
                 script {
                     // Démarre le conteneur Nexus
