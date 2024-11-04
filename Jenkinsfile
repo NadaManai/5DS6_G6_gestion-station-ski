@@ -62,44 +62,34 @@ pipeline {
 
             }
         }
-        stage('Nexus') {
-            environment {
-                NEXUS_CREDENTIALS = credentials('nexus-credentials')
-            }
-            steps {
-                script {
-                    // Démarrer le conteneur Nexus
-                    sh 'docker start nexus'
+        stage('Start, Check, and Deploy to Nexus') {
+                    steps {
+                        script {
+                            // Démarre le conteneur Nexus
+                            sh 'docker start nexus'
 
-                    // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
-                    def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
-                    if (!nexusRunning) {
-                        error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
-                    } else {
-                        echo "Nexus est démarré et opérationnel."
+                            // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
+                            def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
+                            if (!nexusRunning) {
+                                error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
+                            } else {
+                                echo "Nexus est démarré et opérationnel."
+                            }
+
+                            // Pause pour s'assurer que Nexus est bien initialisé
+                            sh 'sleep 10'
+
+                            // Déployer sur Nexus avec les credentials injectés
+                            withCredentials([
+                                usernamePassword(credentialsId: 'nexus-credentials',
+                                                usernameVariable: 'NEXUS_USERNAME',
+                                                passwordVariable: 'NEXUS_PASSWORD')
+                            ]) {
+                                sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml'
+                            }
+                        }
                     }
-
-                    // Pause pour s'assurer que Nexus est bien initialisé
-                    sh 'sleep 10'
-
-                    // Créer un fichier settings.xml avec les credentials Nexus
-                    writeFile file: 'settings.xml', text: """
-                    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-                        <servers>
-                            <server>
-                                <id>deploymentRepo</id>
-                                <username>${NEXUS_CREDENTIALS_USR}</username>
-                                <password>${NEXUS_CREDENTIALS_PSW}</password>
-                            </server>
-                        </servers>
-                    </settings>
-                    """
-
-                    // Exécuter la commande Maven deploy avec le settings.xml pour l'authentification
-                    sh 'mvn deploy -s settings.xml -DskipTests -X'
                 }
-            }
-        }
 
 
 
