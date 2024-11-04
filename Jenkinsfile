@@ -62,26 +62,29 @@ pipeline {
             }
         }
         stage('Nexus') {
-            script {
-                // Démarrer le conteneur Nexus
-                sh 'docker start nexus'
+            steps {
+                script {
+                    // Démarrer le conteneur Nexus
+                    sh 'docker start nexus'
 
-                // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
-                def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
+                    // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
+                    def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
 
-                if (!nexusRunning) {
-                    error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
-                } else {
-                    echo "Nexus est démarré et opérationnel."
+                    if (!nexusRunning) {
+                        error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
+                    } else {
+                        echo "Nexus est démarré et opérationnel."
+                    }
+
+                    // Pause pour s'assurer que Nexus est bien initialisé
+                    sh 'sleep 10'
+
+                    // Exécuter la commande Maven deploy
+                    sh 'mvn deploy -DskipTests'
                 }
-
-                // Pause pour s'assurer que Nexus est bien initialisé
-                sh 'sleep 30'
-
-                // Exécuter la commande Maven deploy
-                sh 'mvn deploy -DskipTests'
             }
         }
+
 
     }
 }
