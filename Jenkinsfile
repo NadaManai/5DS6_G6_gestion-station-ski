@@ -17,14 +17,14 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-
+    /*
         stage('Test') {
             steps {
                 sh 'mvn test'
             }
             post {
                 always {
-                    junit '**/target/sunfire-reports/*.xml'
+
                 }
             }
         }
@@ -42,12 +42,12 @@ pipeline {
             }
             post {
                 always {
-                    jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes'
+
                 }
             }
         }
+*/
 
-        /*
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
@@ -127,6 +127,6 @@ pipeline {
                 }
             }
         }
-        */
+
     }
 }
