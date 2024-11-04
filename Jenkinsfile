@@ -56,6 +56,13 @@ pipeline {
 
         // Dependency check here
 
+        stage('OWASP Dependency Check') {
+             steps {
+                        dependencyCheck additionalArguments: '--scan target/', odcInstallation: 'DP-Check'
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                   }
+                }
+
         stage('Maven Deploy to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
