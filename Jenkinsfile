@@ -63,33 +63,28 @@ pipeline {
             }
         }
         stage('Start, Check, and Deploy to Nexus') {
-                    steps {
-                        script {
-                            // Démarre le conteneur Nexus
-                            sh 'docker start nexus'
+            steps {
+                script {
+                    // Démarre le conteneur Nexus
+                    sh 'docker start nexus'
 
-                            // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
-                            def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
-                            if (!nexusRunning) {
-                                error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
-                            } else {
-                                echo "Nexus est démarré et opérationnel."
-                            }
-
-                            // Pause pour s'assurer que Nexus est bien initialisé
-                            sh 'sleep 10'
-
-                            // Déployer sur Nexus avec les credentials injectés
-                            withCredentials([
-                                usernamePassword(credentialsId: 'nexus-credentials',
-                                                usernameVariable: 'NEXUS_USERNAME',
-                                                passwordVariable: 'NEXUS_PASSWORD')
-                            ]) {
-                                sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml'
-                            }
-                        }
+                    // Vérifier que Nexus est bien démarré avec une vérification sur docker ps
+                    def nexusRunning = sh(script: 'docker ps | grep nexus', returnStatus: true) == 0
+                    if (!nexusRunning) {
+                        error "Le conteneur Nexus n'est pas en cours d'exécution. Veuillez vérifier la configuration."
+                    } else {
+                        echo "Nexus est démarré et opérationnel."
                     }
+
+                    // Pause pour s'assurer que Nexus est bien initialisé
+                    sh 'sleep 10'
+
+                    // Déployer sur Nexus sans injection de credentials
+                    sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml'
                 }
+            }
+        }
+
 
 
 
