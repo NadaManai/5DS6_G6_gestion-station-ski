@@ -15,8 +15,10 @@ pipeline {
         }
         stage('Maven Clean') {
                     steps {
-                        // Exécute 'mvn clean' en évitant les tests
-                        sh 'mvn clean -DskipTests'
+                        // Exécute 'mvn clean install' pour installer et compiler
+                                        sh 'mvn clean install -U -DskipTests'
+                                        // Ensuite, 'mvn package' pour générer le package final
+                                        sh 'mvn clean package -DskipTests'
                     }
                 }
     }
