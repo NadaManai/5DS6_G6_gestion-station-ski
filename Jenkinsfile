@@ -58,6 +58,7 @@ pipeline {
 
         stage('OWASP Dependency Check') {
              steps {
+                        slackSend message: 'Checking dependencies'
                         dependencyCheck additionalArguments: '--scan target/', odcInstallation: 'DP-Check'
                         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                    }
