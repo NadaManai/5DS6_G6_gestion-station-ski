@@ -84,6 +84,16 @@ pipeline {
                 }
             }
         }
+        stage('Build and Package Docker Image') {
+            steps {
+                // Étape de packaging Maven
+                sh 'mvn clean package -DskipTests'
+
+                // Étape de construction de l'image Docker
+                sh 'docker build -t aliyounes/gestion-station-ski:1.4 .'
+            }
+        }
+
 
 
 
