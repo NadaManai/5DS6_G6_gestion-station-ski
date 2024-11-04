@@ -84,7 +84,7 @@ pipeline {
                 }
             }
         }
-        stage('Build and Package Docker Image') {
+        stage('Docker Image') {
             steps {
                 // Étape de packaging Maven
                 sh 'mvn clean package -DskipTests'
@@ -93,6 +93,17 @@ pipeline {
                 sh 'docker build -t aliyounes/gestion-station-ski:1.4 .'
             }
         }
+        stage('Docker Hub') {
+            steps {
+                // Connexion à Docker Hub
+                sh 'docker login -u aliyounes -p201JMT4012'
+
+                // Pousser l'image sur Docker Hub
+                sh 'docker push aliyounes/gestion-station-ski:1.4'
+            }
+        }
+
+
 
 
 
