@@ -44,12 +44,21 @@ pipeline {
                     // Démarrer SonarQube en Docker
                     sh 'docker start sonarqube'
 
-                    // Pause pour s'assurer que SonarQube démarre correctement
-                    sh 'sleep 30'
+                    // Boucle pour vérifier que SonarQube est prêt
+                    sh '''
+                    until docker ps | grep sonarqube; do
+                        echo "Waiting for SonarQube to start..."
+                        sleep 10
+                    done
 
-                    // Exécuter l'analyse SonarQube
+                    # Attendre un peu plus longtemps pour s'assurer qu'il est complètement prêt
+                    sleep 30
+                    '''
+
+                    // Exécuter l’analyse SonarQube
                     sh 'mvn sonar:sonar -Dspring.profiles.active=test -Dsonar.projectKey=gestion-station-ski -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqa_40c91d3bd3e61c5131e16c52b8dd1990c2e80156'
                 }
+
             }
         }
     }
