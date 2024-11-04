@@ -42,9 +42,6 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            when {
-                branch 'NadaManai_5DS6_G6'  
-            }
             steps {
                 sh 'mvn test jacoco:report'
                 sh "mvn sonar:sonar -Dsonar.projectKey=DevOps-Project -Dsonar.host.url=http://192.168.0.33:9000 -Dsonar.login=sqa_68cd8eba8f84e6b8410680b8dec543f19320743f -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
