@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Replace with your root password
+      MYSQL_DATABASE: stationSki                    # Your database name
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  tp:
+    build: .
+    container_name: tp
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stationSki?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root  # Match this with the MySQL root password
+    ports:
+      - "8089:8089"
+    depends_on:
+      - mysql
+    restart: always
+
+volumes:
+  mysql_data:
