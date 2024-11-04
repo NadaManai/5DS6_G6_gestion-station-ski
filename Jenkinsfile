@@ -80,7 +80,7 @@ pipeline {
                     sh 'sleep 10'
 
                     // Déployer sur Nexus sans injection de credentials
-                    sh 'mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml -X'
+                    sh 'mvn clean deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml'
                 }
             }
         }
