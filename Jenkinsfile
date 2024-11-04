@@ -21,5 +21,24 @@ pipeline {
                                         sh 'mvn clean package -DskipTests'
                     }
                 }
+        stage('Mockito Tests') {
+                    steps {
+                        script {
+                            echo "Démarrage des tests unitaires avec Mockito..."
+                            sh 'mvn test -Dspring.profiles.active=test'
+                            echo "Tests unitaires terminés avec succès !"
+                        }
+                    }
+                    post {
+                        success {
+                            echo "Tous les tests unitaires sont réussis."
+                        }
+                        failure {
+                            echo "Des tests unitaires ont échoué."
+                        }
+                    }
+                }
+            }
+
     }
 }
