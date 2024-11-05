@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                //checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
+                checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
                 slackSend message: 'I cloned my branch '
                 git branch: 'Nour', credentialsId: 'devops-pipeline', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
@@ -17,54 +17,44 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-/*
-    stage('Test') {
-             steps {
-                 sh 'mvn test -Dtest=SubscriptionServicesImplTest'
-             }
-             post {
-                 always {
+    /*
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
 
-                 }
-                 failure {
-                     slackSend message: 'Tests failed. Please check the report for details.'
-                 }
-                 success {
-                     slackSend message: 'Tests ran successfully!'
-                 }
-             }
-         }*/
-/*
+                }
+            }
+        }
+
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
-
                     sh '''
-                        mvn test jacoco:report
+                        mvn test jacoco-report
                         chmod +x mvnw
                         ./mvnw clean package
                         ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.url=http://192.168.1.20:9000/ -Dsonar.login=squ_22403973d23165d1f6c677a22be4ccf457a87f4a -Dsonar.projectName=5DS6_G6_gestion-station-ski -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     '''
                 }
-
-
-                 }
             }
+            post {
+                always {
 
-       stage('Quality gate') {
-                           steps {
-                               timeout(time:2, unit: 'MINUTES'){
-                               waitForQualityGate abortPipeline: true
-                               }
-                           }
-                       }
+                }
+            }
+        }
 */
+
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
 
+        // Dependency check here
 
         stage('OWASP Dependency Check') {
              steps {
@@ -118,6 +108,7 @@ pipeline {
             }
         }
 */
+        // TODO prune
 
         stage('Deploy with Docker Compose') {
             steps {
