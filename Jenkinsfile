@@ -22,9 +22,8 @@ pipeline {
             steps {
                 sh 'mvn test jacoco-report'
             }
-
             }
-
+*/
 
         stage('Sonarqube Analysis') {
             steps {
@@ -38,7 +37,6 @@ pipeline {
                 }
             }
             }
-       */
 
        stage('Quality gate') {
                            steps {
