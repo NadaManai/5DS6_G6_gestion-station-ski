@@ -179,7 +179,35 @@ pipeline {
                                 }
                             }
          }               }
+         stage('K8S') {
+                     steps {
+                         script {
+                             // Démarrer le serveur K3s
+                             sh 'docker start k3s-server'
+                             echo "Serveur K3s démarré"
 
+                             // Appliquer le fichier de déploiement Kubernetes
+                             sh 'kubectl apply -f kubernetes-deployment.yml'
+
+                             // Attendre que les pods soient prêts
+                             echo "Attente de la disponibilité des pods..."
+                             sh '''
+                             until kubectl get pods -l app=app-spring -o jsonpath='{.items[0].status.containerStatuses[0].ready}' | grep -q "true"; do
+                                 echo "Pod app-spring pas encore prêt, attente de 5 secondes..."
+                                 sleep 5
+                             done
+                             '''
+
+                             echo "Le pod app-spring est prêt !"
+
+                             // Récupérer l'adresse IP du node
+                             def nodeIP = sh(script: "kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}'", returnStdout: true).trim()
+
+                             // Afficher l'URL d'accès pour vérification
+                             echo "Application accessible à http://${nodeIP}:30001/api/skier/getSkiersBySubscription"
+                         }
+                     }
+         }
 
 
 
