@@ -29,9 +29,3 @@ services:
     tty: true
 
 
-
-  app-angular:
-
-
-volumes:
-  db:
