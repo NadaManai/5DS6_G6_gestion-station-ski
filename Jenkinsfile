@@ -34,7 +34,7 @@ pipeline {
                  }
              }
          }
-*/
+
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
@@ -64,7 +64,7 @@ pipeline {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
-
+*/
 
         stage('OWASP Dependency Check') {
              steps {
