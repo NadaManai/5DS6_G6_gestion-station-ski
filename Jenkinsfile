@@ -22,6 +22,11 @@ pipeline {
             steps {
                 sh 'mvn -Dtest=SubscriptionServicesImplTest test'
             }
+             post {
+                            always {
+                                junit '**/target/surefire-reports/*.xml'
+                            }
+                        }
             }
 
         stage('Sonarqube Analysis') {
