@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-spring
+  template:
+    metadata:
+      labels:
+        app: app-spring
+    spec:
+      containers:
+        - name: app-spring
+          image: aliyounes/gestion-station-ski:1.4
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://localhost:3306/stationSki?createDatabaseIfNotExist=true"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ""
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-spring-service
+spec:
+  selector:
+    app: app-spring
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8089
+  type: NodePort  # Permet l'accès externe en spécifiant un NodePort
