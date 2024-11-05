@@ -1,3 +1,46 @@
+# MySQL Deployment in Kubernetes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysqldb
+  template:
+    metadata:
+      labels:
+        app: mysqldb
+    spec:
+      containers:
+        - name: mysqldb
+          image: mysql:5.7
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: "stationSki"
+
+---
+# MySQL Service in Kubernetes
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  selector:
+    app: mysqldb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+
+---
+# Spring Boot Deployment in Kubernetes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +62,7 @@ spec:
             - containerPort: 8089
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://localhost:3306/stationSki?createDatabaseIfNotExist=true"
+              value: "jdbc:mysql://mysqldb:3306/stationSki?createDatabaseIfNotExist=true"
             - name: SPRING_DATASOURCE_USERNAME
               value: "root"
             - name: SPRING_DATASOURCE_PASSWORD
@@ -28,7 +71,9 @@ spec:
               value: "update"
             - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+
 ---
+# Spring Boot Service in Kubernetes
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,4 +85,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8089
-  type: NodePort  # Permet l'accès externe en spécifiant un NodePort
+      nodePort: 30001
+  type: NodePort
