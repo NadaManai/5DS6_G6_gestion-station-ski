@@ -30,6 +30,7 @@ pipeline {
                 withSonarQubeEnv(installationName: 'sonar-server') {
 
                     sh '''
+                        mvn test jacoco:report
                         chmod +x mvnw
                         ./mvnw clean package
                         ./mvnw clean compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.url=http://192.168.1.20:9000/ -Dsonar.login=squ_22403973d23165d1f6c677a22be4ccf457a87f4a -Dsonar.projectName=5DS6_G6_gestion-station-ski -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
@@ -52,7 +53,6 @@ pipeline {
             }
         }
 
-        // Dependency check here
 
         stage('OWASP Dependency Check') {
              steps {
