@@ -33,7 +33,6 @@ pipeline {
                 sh 'mvn test'
             }
         }
-
         stage('Build image') {
             steps {
                 echo 'Building image :'
@@ -52,8 +51,25 @@ pipeline {
         stage('Docker Compose Up') {
             steps {
                 echo 'Starting services with Docker Compose :'
-                sh 'docker compose up -d' 
+                sh 'docker compose up -d'
             }
+        }
+        stage('Grafana and Prometheus') {
+            steps {
+                script {
+                    sh 'docker start prometheus || docker run -d --name prometheus -p 9090:9090 -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus'
+                    sh 'docker start grafana || docker run -d --name grafana -p 3000:3000 grafana/grafana'
+                }
+            }
+        }
+    }
+   
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
