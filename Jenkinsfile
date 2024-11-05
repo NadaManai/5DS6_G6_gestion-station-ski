@@ -133,7 +133,7 @@ pipeline {
                         </ul>
                         <h3>Postman Test Results:</h3>
                         <p>Here are the results of the GET request for all instructors.</p>
-                        <pre>${sh(script: 'curl -s http://192.168.0.110:8089/api/instructor/all', returnStdout: true)}</pre>
+                        <pre>${sh(script: 'curl -s http://192.168.0.33:8089/api/instructor/all', returnStdout: true)}</pre>
                         <p>Keep up the good work! 🚀</p>
                     """,
                     mimeType: 'text/html',
