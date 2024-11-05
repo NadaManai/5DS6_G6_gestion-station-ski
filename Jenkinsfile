@@ -108,7 +108,6 @@ pipeline {
             }
         }
 */
-        // TODO prune
 
         stage('Deploy with Docker Compose') {
             steps {
