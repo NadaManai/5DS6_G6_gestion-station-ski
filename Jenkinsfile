@@ -17,13 +17,12 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-    /*
+
         stage('Test') {
             steps {
                 sh 'mvn test jacoco-report'
             }
             }
-*/
 
         stage('Sonarqube Analysis') {
             steps {
