@@ -93,7 +93,7 @@ pipeline {
                 script {
                     sleep(10)
                     sh '''
-                        curl -X PUT http://192.168.0.110:8089/api/instructor/addAndAssignToCourse/2 \
+                        curl -X PUT http://192.168.0.33:8089/api/instructor/addAndAssignToCourse/2 \
                         -H "Content-Type: application/json" \
                         -d '{
                             "firstName": "Nada",
@@ -101,7 +101,7 @@ pipeline {
                             "dateOfHire": "2023-10-01"
                         }'
                     '''
-                    sh 'curl -X GET http://192.168.0.110:8089/api/instructor/all'
+                    sh 'curl -X GET http://192.168.0.33:8089/api/instructor/all'
                 }
             }
         }
