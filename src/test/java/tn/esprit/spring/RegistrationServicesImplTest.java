@@ -2,6 +2,7 @@ package tn.esprit.spring;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -103,12 +104,12 @@ class RegistrationServicesImplTest {
         Course course = new Course();
         course.setNumCourse(1L);
         course.setTypeCourse(TypeCourse.INDIVIDUAL);
-        Registration registration = new Registration(); // Initialize the registration object
+        Registration registration = new Registration();
 
         when(skierRepository.findById(anyLong())).thenReturn(Optional.of(skier));
         when(courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
         when(registrationRepository.countDistinctByNumWeekAndSkier_NumSkierAndCourse_NumCourse(anyInt(), anyLong(), anyLong())).thenReturn(0L);
-        when(registrationRepository.save(any(Registration.class))).thenReturn(registration); // Add this line
+        when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
 
         // Act
         Registration result = registrationServices.addRegistrationAndAssignToSkierAndCourse(registration, 1L, 1L);
@@ -117,9 +118,31 @@ class RegistrationServicesImplTest {
         assertNotNull(result);
         assertEquals(skier, result.getSkier());
         assertEquals(course, result.getCourse());
+        verify(registrationRepository).save(registration);
     }
 
+    @Test
+    void addRegistrationAndAssignToSkierAndCourse_ShouldRejectDueToFullCourse() {
+        // Arrange
+        Skier skier = new Skier();
+        skier.setNumSkier(1L);
+        skier.setDateOfBirth(LocalDate.now().minusYears(20));
+        Course course = new Course();
+        course.setNumCourse(1L);
+        course.setTypeCourse(TypeCourse.COLLECTIVE_CHILDREN);
+        Registration registration = new Registration();
+        registration.setNumWeek(1);
 
-    // Additional tests can be added here for other scenarios
+        when(skierRepository.findById(anyLong())).thenReturn(Optional.of(skier));
+        when(courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
+        when(registrationRepository.countDistinctByNumWeekAndSkier_NumSkierAndCourse_NumCourse(anyInt(), anyLong(), anyLong())).thenReturn(0L);
+        when(registrationRepository.countByCourseAndNumWeek(any(Course.class), anyInt())).thenReturn(6L);
 
+        // Act
+        Registration result = registrationServices.addRegistrationAndAssignToSkierAndCourse(registration, 1L, 1L);
+
+        // Assert
+        assertNull(result);
+        verify(registrationRepository, never()).save(any(Registration.class));
+    }
 }
