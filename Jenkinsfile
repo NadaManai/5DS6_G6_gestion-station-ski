@@ -13,7 +13,7 @@ pipeline {
     }
 
     triggers {
-        // Test 
+        // Test webhook
         githubPush()
     }
 
