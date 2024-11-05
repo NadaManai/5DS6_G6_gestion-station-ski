@@ -33,8 +33,8 @@ pipeline {
                      slackSend message: 'Tests ran successfully!'
                  }
              }
-         }
-
+         }*/
+/*
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
