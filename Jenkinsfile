@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
+                //checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
                 slackSend message: 'I cloned my branch '
                 git branch: 'Nour', credentialsId: 'devops-pipeline', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git'
             }
@@ -18,16 +18,23 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'mvn -Dtest=SubscriptionServicesImplTest test'
-            }
+    stage('Test') {
+             steps {
+                 // Running all tests as a fallback if specific test name causes issues
+                 sh 'mvn test -Dtest=SubscriptionServicesImplTest || mvn verify'
+             }
              post {
-                            always {
-                                junit '**/target/surefire-reports/*.xml'
-                            }
-                        }
-            }
+                 always {
+                     junit '**/target/surefire-reports/*.xml'
+                 }
+                 failure {
+                     slackSend message: 'Tests failed. Please check the report for details.'
+                 }
+                 success {
+                     slackSend message: 'Tests ran successfully!'
+                 }
+             }
+         }
 
         stage('Sonarqube Analysis') {
             steps {
