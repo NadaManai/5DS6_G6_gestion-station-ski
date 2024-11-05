@@ -2,7 +2,7 @@ FROM openjdk:17
 
 WORKDIR /app
 
-COPY ./target/gestion-station-ski-1.0.jar /app/app.jar
+COPY ./target/gestion-station-ski-1.0-SNAPSHOT.jar /app/app.jar
 
 EXPOSE 8089
 
