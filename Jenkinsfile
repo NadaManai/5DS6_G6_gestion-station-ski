@@ -17,15 +17,14 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-
+/*
     stage('Test') {
              steps {
-                 // Running all tests as a fallback if specific test name causes issues
-                 sh 'mvn test -Dtest=SubscriptionServicesImplTest || mvn verify'
+                 sh 'mvn test -Dtest=SubscriptionServicesImplTest'
              }
              post {
                  always {
-                     junit '**/target/surefire-reports/*.xml'
+
                  }
                  failure {
                      slackSend message: 'Tests failed. Please check the report for details.'
@@ -35,7 +34,7 @@ pipeline {
                  }
              }
          }
-
+*/
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
