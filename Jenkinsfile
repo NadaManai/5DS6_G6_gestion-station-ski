@@ -58,13 +58,13 @@ pipeline {
                                }
                            }
                        }
-
+*/
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
-*/
+
 
         stage('OWASP Dependency Check') {
              steps {
