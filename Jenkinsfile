@@ -27,6 +27,13 @@ pipeline {
                 sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Eya12345678@'
             }
         }
+        
+        stage('Deploy') {
+            steps {
+                // Commande pour déployer avec l'option de skipper les tests
+                sh 'mvn deploy -DskipTests=true'
+            }
+        }
         stage('JUNIT/MOCKITO') {
             steps {
                 echo 'JUnit Tests :'
