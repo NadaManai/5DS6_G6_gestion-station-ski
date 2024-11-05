@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Subscription;
 import tn.esprit.spring.entities.TypeSubscription;
@@ -16,7 +17,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/subscription")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200",maxAge = 3360)
 public class SubscriptionRestController {
 
     private final ISubscriptionServices subscriptionServices;
@@ -55,6 +56,13 @@ public class SubscriptionRestController {
     public List<Subscription> getSubscriptionsByDates(@PathVariable("date1") LocalDate startDate,
                                                       @PathVariable("date2") LocalDate endDate){
         return subscriptionServices.retrieveSubscriptionsByDates(startDate, endDate);
+    }
+
+    @Operation(description = "Delete Subscription ")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteSubscription(@PathVariable("id") Long id){
+        System.out.println(subscriptionServices.retrieveSubscriptionById(id));
+        return  ResponseEntity.ok(subscriptionServices.deleteSubscription2(id));
     }
 
 }

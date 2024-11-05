@@ -72,6 +72,19 @@ public class SubscriptionServicesImpl implements ISubscriptionServices{
     }
 
 
+    @Override
+    public String deleteSubscription2(Long idSub){
+        Subscription sub = subscriptionRepository.findById(idSub).orElse(null);
+        System.out.println(sub);
+        String msg = "";
+        if(sub!=null){
+            subscriptionRepository.delete(sub);
+            msg = "the subscription is deleted successfully !";
+        }
+        return msg;
+    }
+
+
 
 
     @Override

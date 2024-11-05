@@ -22,4 +22,6 @@ public interface ISubscriptionServices {
 	void retrieveSubscriptions();
 
 	public Iterable<Subscription> getAllSubscriptions();
+
+	public String deleteSubscription2(Long idSub);
 }
