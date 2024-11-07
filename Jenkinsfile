@@ -19,19 +19,17 @@ pipeline {
         }
 
         stage('Junit - Mockito Tests') {
-        /*
+
             steps {
                 sh 'mvn test'
             }
-            post {
-                always {
 
-                }
-            }*/
         }
 
 
         stage('Jacoco Report'){
+        steps{
+        }
         }
 
 
@@ -52,6 +50,9 @@ pipeline {
 
                 }
             }*/
+
+            steps{
+            }
         }
 
 
@@ -137,13 +138,16 @@ pipeline {
                         docker start prometheus
                         docker ps -a
                     '''
-                    slackSend message: "Let's visualize the dashboard at: http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
+
                 }
             }
         }
 
 
         stage('slack notification'){
+        steps{
+        slackSend message: "Let's visualize the dashboard at: http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
+        }
         }
 
     }
