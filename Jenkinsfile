@@ -4,7 +4,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
     stages {
-        stage('Checkout') {
+        stage('Git') {
             steps {
                 checkout scmGit(branches: [[name: '*/Nour']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-trigger-token', url: 'https://github.com/NadaManai/5DS6_G6_gestion-station-ski.git']])
                 slackSend message: 'I cloned my branch '
