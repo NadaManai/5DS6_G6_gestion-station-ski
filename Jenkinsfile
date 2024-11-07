@@ -21,7 +21,7 @@ pipeline {
         stage('Junit - Mockito Tests') {
 
             steps {
-                sh 'mvn test'
+                sh 'mvn clean'
             }
 
         }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Jacoco Report'){
         steps{
-        mvn clean
+        sh 'mvn clean'
         }
         }
 
