@@ -17,8 +17,9 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-    /*
-        stage('Test') {
+
+        stage('Junit - Mockito Tests') {
+        /*
             steps {
                 sh 'mvn test'
             }
@@ -26,10 +27,16 @@ pipeline {
                 always {
 
                 }
-            }
+            }*/
         }
 
+
+        stage('Jacoco Report'){
+        }
+
+
         stage('Sonarqube Analysis') {
+        /*
             steps {
                 withSonarQubeEnv(installationName: 'sonar-server') {
                     sh '''
@@ -44,9 +51,9 @@ pipeline {
                 always {
 
                 }
-            }
+            }*/
         }
-*/
+
 
         stage('Build') {
             steps {
@@ -64,7 +71,7 @@ pipeline {
                    }
                 }
 
-        stage('Maven Deploy to Nexus') {
+        stage('Deploy to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: '571f55fb-0ae2-4456-b089-9458c4925c67', targetLocation: 'mavensettings')]) {
                     slackSend message: 'I deployed my app to nexus'
@@ -109,7 +116,7 @@ pipeline {
         }
 */
 
-        stage('Deploy with Docker Compose') {
+        stage('Docker Compose') {
             steps {
                 script {
                     sh '''
@@ -122,7 +129,7 @@ pipeline {
             }
         }
 
-        stage('Prometheus Grafana') {
+        stage('Prometheus and Grafana') {
             steps {
                 script {
                     sh '''
@@ -133,6 +140,10 @@ pipeline {
                     slackSend message: "Let's visualize the dashboard at: http://192.168.1.20:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?from=now-30m&to=now&timezone=browser"
                 }
             }
+        }
+
+
+        stage('slack notification'){
         }
 
     }
